@@ -1,18 +1,41 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\{
+    HomeController,
+    KelasController,
+    SiswaController,
+    MapelController,
+    GuruController
+};
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/guru', function () {
+    return view('component.guru.index');
+});
+
+ // route halaman utama
+//  Route::resource('/', HomeController::class);
+
+ //route kelas
+ Route::resource('/kelas', KelasController::class);
+ Route::get('/kelas/edit/{id}', [KelasController::class, 'edit']);
+ Route::get('/kelas/hapus/{id}', [KelasController::class, 'destroy']);
+
+ //route siswa
+ Route::resource('/siswa', SiswaController::class);
+ Route::get('/siswa/edit/{id}', [SiswaController::class, 'edit']);
+ Route::get('/siswa/hapus/{id}', [SiswaController::class, 'destroy']);
+
+ //route mapel
+ Route::resource('/mapel', MapelController::class);
+ Route::get('/mapel/edit/{id}', [MapelController::class, 'edit']);
+ Route::get('/mapel/hapus/{id}', [MapelController::class, 'destroy']);
+
+ //route guru
+ Route::resource('/guru', GuruController::class);
+ Route::get('/guru/edit/{id}', [GuruController::class, 'edit']);
+ Route::get('/guru/hapus/{id}', [GuruController::class, 'destroy']);

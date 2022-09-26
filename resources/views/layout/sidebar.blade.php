@@ -22,49 +22,55 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
+                <li class="nav-header">
+                    DASHBOARD
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard"></i>
-                        <p>
-                            Kelas
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Siswa
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Mapel
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
-                        <p>
-                            Guru
-                        </p>
-                    </a>
+                <li class="nav-header">
+                    MASTER
+                    <li class="nav-item">
+                        <a href="{{ route('kelas.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-chalkboard"></i>
+                            <p>
+                                Kelas
+                            </p>
+                        </a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a href="{{ route('siswa.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Siswa
+                            </p>
+                        </a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a href="{{ route('mapel.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-book"></i>
+                            <p>
+                                Mapel
+                            </p>
+                        </a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a href="{{ route('guru.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                            <p>
+                                Guru
+                            </p>
+                        </a>
+                    </li>
                 </li>
             </ul>
         </nav>

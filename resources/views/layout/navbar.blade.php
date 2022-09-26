@@ -8,5 +8,8 @@
 
     <ul class="navbar-nav ml-auto">
         {{-- sign out --}}
+        <li class="nav-link">
+            <a href="#" class="text-danger"><i class="fa fa-sign-out-alt"></i> Log Out</a>
+        </li>
     </ul>
 </nav>
