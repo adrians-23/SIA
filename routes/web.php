@@ -31,6 +31,7 @@ Route::get('/guru', function () {
  Route::get('/siswa/hapus/{id}', [SiswaController::class, 'destroy']);
 
  //route mapel
+ Route::get('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
  Route::resource('/mapel', MapelController::class);
  Route::get('/mapel/edit/{id}', [MapelController::class, 'edit']);
  Route::get('/mapel/hapus/{id}', [MapelController::class, 'destroy']);

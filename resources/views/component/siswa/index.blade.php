@@ -27,17 +27,12 @@
         <div class="card-header">
             <h3 class="card-title">Data Siswa</h3>
             <div class="card-tools">
-                <form action="/siswa" class="d-flex" role="search" method="GET">
-                    <input class="form-control" type="search" name="search" placeholder="Cari Siswa" aria-label="Search" style="width: 200px;">
-                    <button class="btn btn-outline-secondary mx-1" type="submit">Cari</button>
-                </form>
+                <button type="button" onclick="addForm('{{ route('siswa.store')}}')" class="btn btn-tool">
+                    <div class="btn btn-sm btn-primary">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </button>
             </div>
-            <br>
-            <button type="button" onclick="addForm('{{ route('siswa.store')}}')" class="btn btn-tool">
-                <div class="btn btn-sm btn-primary">
-                    <i class="fa fa-plus"></i>
-                </div>
-            </button>
         </div>
         <div class="card-body">
             {{-- Judul Data Siswa --}}
@@ -48,8 +43,8 @@
                         <th scope="col">Nama</th>
                         <th scope="col">Alamat</th>
                         <th scope="col">Jenis Kelamin</th>
-                        <th scope="col">Kelas ID</th>
-                        <th scope="col">Mapel ID</th>
+                        <th scope="col">Kelas</th>
+                        <th scope="col">Mapel</th>
                         <th scope="col" width="84px">Action</th>
                     </tr>
                 </thead>
@@ -58,25 +53,20 @@
                 <tbody class="table-group-divide">
                     @foreach ($siswa as $key => $item)
                     <tr>
-                        <th scope="row">{{ $siswa -> firstItem() + $key }}</th>
+                        <th scope="row">{{ $key+1 }}</th>
                         <td>{{ $item->nama }}</td>
                         <td>{{ $item->alamat }}</td>
                         <td>{{ $item->jenis_kelamin }}</td>
                         <td>{{ ! empty($item->kelas->nama) ?  $item->kelas->nama : '' }}</td>
                         <td>{{ ! empty($item->mapel->nama) ?  $item->mapel->nama : '' }}</td>
                         <td>
-                            <button onclick="editForm('')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            <button onclick="editData('{{ route('siswa.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                            <button onclick="deleteData('{{ route('siswa.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-
-            <div class="mt-3">
-                {{ $siswa->links() }}
-            </div>
-
         </div>
 
         {{-- <div class="card-footer">
@@ -87,20 +77,80 @@
 
 </section>
 
-@include('component.siswa.create')
+@include('component.siswa.form')
 
 @endsection
 
 @push('script')
     <script>
-        function addForm(){
+
+        // Data Tables
+        let table;
+
+        $(function() {
+            table = $('.table').DataTable()
+        })
+
+        $('#modalForm').on('submit', function(e){
+            if(! e.preventDefault()){
+                $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
+                .done((response) => {
+                    $('#modalForm').modal('hide');
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menyimpan Data');
+                    return;
+                })
+            }
+        })
+
+        function addForm(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Tambah Data Guru');
+            $('#modalForm .modal-title').text('Tambah Data Siswa');
+            $('#modalForm form')[0].reset();
+
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('post');
         }
 
-        function editData(){
+        function editData(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Edit Data Guru');
+            $('#modalForm .modal-title').text('Edit Data Siswa');
+
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('put');
+
+            $.get (url)
+                .done((response) => {
+                    $('#modalForm [name=nama]').val(response.nama);
+                    $('#modalForm [name=alamat]').val(response.alamat);
+                    $('#modalForm [name=jenis_kelamin]').val(response.jenis_kelamin);
+                    $('#modalForm [name=kelas_id]').val(response.kelas_id);
+                    $('#modalForm [name=mapel_id]').val(response.mapel_id);
+                    // console.log(response.nama);
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menampilkan Data');
+                    return;
+                })
+        }
+
+        function deleteData(url){
+            if(confirm('Yakin Ingin Menghapus Data?')){
+                $.post(url, {
+                    '_token' : $('[name=csrf-token]').attr('content'),
+                    '_method' : 'delete'
+                })
+                .done((response) => {
+                    alert('Data Berhasil Dihapus');
+                    return;
+                })
+                .fail((errors) => {
+                    alert('Data Gagal Dihapus!');
+                    return;
+                })
+            }
         }
     </script>
 @endpush

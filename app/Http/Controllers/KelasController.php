@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Validator;
 
 class KelasController extends Controller
 {
@@ -15,12 +16,12 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         // search functionality
-        if($request->has('search')) {
-            $kelas = Kelas::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }else {
-            $kelas = Kelas::paginate(5);
-        }
+        // if($request->has('search')) {
+        //     $kelas = Kelas::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }else {
+        // }
         
+        $kelas = Kelas::all();
         return view('component.kelas.index', compact('kelas'));
     }
 
@@ -31,7 +32,7 @@ class KelasController extends Controller
      */
     public function create()
     {
-        return view('component.kelas.create');
+        return view('component.kelas.form');
     }
 
     /**
@@ -42,13 +43,23 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nama' => 'required',
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required'
         ]);
 
-        $kelas = Kelas::create($request->all());
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect('kelas');
+        $kelas = Kelas::create([
+            'nama' => $request->nama
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Disimpan',
+            'data' => $kelas
+        ]);
     }
 
     /**
@@ -57,9 +68,10 @@ class KelasController extends Controller
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function show(Kelas $kelas)
+    public function show($id)
     {
-        //
+        $kelas = Kelas::find($id);
+        return response()->json($kelas);
     }
 
     /**
@@ -70,8 +82,7 @@ class KelasController extends Controller
      */
     public function edit($id)
     {
-        $kelas = Kelas::find($id);
-        return view('component.kelas.edit', compact('kelas'));
+        //
     }
 
     /**
@@ -81,17 +92,13 @@ class KelasController extends Controller
      * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'nama' => 'required'
-        ]);
+        $kelas = Kelas::find($id);
+        $kelas->nama = $request->nama;
+        $kelas->update();
 
-        $kelas->update([
-            'nama' => $request->nama
-        ]);
-
-        return redirect('kelas');
+        return response()->json('Data Berhasil Disimpan');
     }
 
     /**

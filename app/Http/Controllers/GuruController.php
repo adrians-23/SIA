@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Validator;
 
 class GuruController extends Controller
 {
@@ -16,17 +17,18 @@ class GuruController extends Controller
     public function index(Request $request)
     {
         // search functionality
-        if($request->has('search')){
-            $guru = Guru::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $guru = Guru::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $guru = Guru::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $guru = Guru::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }else {
-            $guru = Guru::paginate(5);
-        }
+        // if($request->has('search')){
+        //     $guru = Guru::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $guru = Guru::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $guru = Guru::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $guru = Guru::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }else {
+        // }
+
+        $guru = Guru::all();
         $mapel_id = Mapel::all();
         return view('component.guru.index', compact('guru', 'mapel_id'));
     }
@@ -39,7 +41,7 @@ class GuruController extends Controller
     public function create()
     {
         $mapel_id = Mapel::all();
-        return view('component.guru.create', compact('mapel_id'));
+        return view('component.guru.form', compact('mapel_id'));
     }
 
     /**
@@ -50,15 +52,29 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nama' => 'required|max:255',
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required',
             'alamat' => 'required',
-            'jenis_kelamin' => 'required'
+            'jenis_kelamin' => 'required',
+            'mapel_id' => 'required'
         ]);
 
-        $guru = Guru::create($request->all());
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect('guru');
+        $guru = Guru::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'mapel_id' => $request->mapel_id
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Disimpan',
+            'data' => $guru
+        ]);
     }
 
     /**
@@ -67,9 +83,10 @@ class GuruController extends Controller
      * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function show(Guru $guru)
+    public function show($id)
     {
-        //
+        $guru = Guru::find($id);
+        return response()->json($guru);
     }
 
     /**
@@ -80,9 +97,7 @@ class GuruController extends Controller
      */
     public function edit($id)
     {
-        $guru = Guru::find($id);
-        $mapel = Mapel::all();
-        return view('component.guru.edit', compact('guru', 'mapel'));
+        //
     }
 
     /**
@@ -92,22 +107,16 @@ class GuruController extends Controller
      * @param  \App\Models\Guru  $guru
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Guru $guru)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'nama' => 'required|max:255',
-            'alamat' => 'required',
-            'jenis_kelamin' => 'required'
-        ]);
+        $guru = Guru::find($id);
+        $guru->nama = $request->nama;
+        $guru->alamat = $request->alamat;
+        $guru->jenis_kelamin = $request->jenis_kelamin;
+        $guru->mapel_id = $request->mapel_id;
+        $guru->update();
 
-        $guru->update([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'mapel_id' => $request->mapel_id
-        ]);
-
-        return redirect('guru');
+        return response()->json('Data Berhasil Disimpan');
     }
 
     /**

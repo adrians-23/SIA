@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Validator;
 
 class MapelController extends Controller
 {
@@ -15,12 +16,23 @@ class MapelController extends Controller
     public function index(Request $request)
     {
         // search functionality
-        if($request->has('search')) {
-            $mapel = Mapel::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }else {
-            $mapel = Mapel::paginate(5);
-        }
+        // if($request->has('search')) {
+        //     $mapel = Mapel::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }else {
+        // }
+
+        $mapel = Mapel::all();
         return view('component.mapel.index', compact('mapel'));
+    }
+
+    public function data()
+    {
+        $mapel = Mapel::orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($mapel)
+            ->addIndexColumn()
+            ->make(true);
     }
 
     /**
@@ -30,7 +42,7 @@ class MapelController extends Controller
      */
     public function create()
     {
-        return view('component.mapel.create');
+        return view('component.mapel.form');
     }
 
     /**
@@ -41,13 +53,23 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nama' => 'required|max:255',
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required'
         ]);
 
-        $mapel = Mapel::create($request->all());
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect('mapel');
+        $mapel = Mapel::create([
+            'nama' => $request->nama
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Disimpan',
+            'data' => $mapel
+        ]);
     }
 
     /**
@@ -56,9 +78,10 @@ class MapelController extends Controller
      * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function show(Mapel $mapel)
+    public function show($id)
     {
-        //
+        $mapel = Mapel::find($id);
+        return response()->json($mapel);
     }
 
     /**
@@ -69,8 +92,7 @@ class MapelController extends Controller
      */
     public function edit($id)
     {
-        $mapel = Mapel::find($id);
-        return view('component.mapel.edit', compact('mapel'));
+        //
     }
 
     /**
@@ -80,17 +102,13 @@ class MapelController extends Controller
      * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mapel $mapel)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'nama' => 'required'
-        ]);
+        $mapel = Mapel::find($id);
+        $mapel->nama = $request->nama;
+        $mapel->update();
 
-        $mapel->update([
-            'nama' => $request->nama
-        ]);
-
-        return redirect('mapel');
+        return response()->json('Data Berhasil Disimpan');
     }
 
     /**
@@ -104,6 +122,6 @@ class MapelController extends Controller
         $mapel = Mapel::find($id);
         $mapel->delete();
 
-        return redirect('mapel');
+        return response()->json(null, 204);
     }
 }

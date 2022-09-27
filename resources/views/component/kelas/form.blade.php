@@ -8,13 +8,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('mapel.store') }}" method="POST">
+                <form action="" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="form-group">
 
                         {{-- Add Mapel --}}
                         <div class="my-1">
-                            <label class="mb-2" for="nama">Nama Mapel</label>
+                            <label class="mb-2" for="nama">Nama Kelas</label>
                             <input type="text" name="nama" id="nama" value="{{ old('nama')}}" class="form-control @error('nama') is-invalid @enderror">
                             @error('nama')
                                 <div class="text-danger">

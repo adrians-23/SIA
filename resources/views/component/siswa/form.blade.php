@@ -8,13 +8,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('guru.store') }}" method="POST">
+                <form action="" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="form-group">
 
                         {{-- Add Nama --}}
                         <div class="my-1">
-                            <label class="mb-2" for="nama">Nama Guru</label>
+                            <label class="mb-2" for="nama">Nama Siswa</label>
                             <input type="text" name="nama" id="nama" value="{{ old('nama')}}" class="form-control @error('nama') is-invalid @enderror">
                             @error('nama')
                                 <div class="text-danger">
@@ -53,9 +54,25 @@
                             @enderror
                         </div>
 
+                        {{-- Add Kelas ID --}}
+                        <div class="my-1">
+                            <label class="mb-2" for="nama">Kelas</label>
+                            <select name="kelas_id" id="kelas_id" value="{{ old('kelas_id')}}" class="form-control @error('kelas_id') is-invalid @enderror">
+                                <option selected>Pilih...</option>
+                                @foreach($kelas_id as $kid)
+                                    <option value="{{$kid->id}}">{{$kid->nama}}</option>
+                                @endforeach
+                            </select>
+                            @error('kelas_id')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
                         {{-- Add Mapel ID --}}
                         <div class="my-1">
-                            <label class="mb-2" for="nama">Mapel ID</label>
+                            <label class="mb-2" for="nama">Mapel</label>
                             <select name="mapel_id" id="mapel_id" value="{{ old('mapel_id')}}" class="form-control @error('mapel_id') is-invalid @enderror">
                                 <option selected>Pilih...</option>
                                 @foreach($mapel_id as $mid)

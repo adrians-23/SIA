@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\Mapel;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
+use Validator;
 
 class SiswaController extends Controller
 {
@@ -17,19 +18,20 @@ class SiswaController extends Controller
     public function index(Request $request)
     {
         // search functionality
-        if($request->has('search')){
-            $siswa = Siswa::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $siswa = Siswa::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $siswa = Siswa::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $siswa = Siswa::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }elseif($request->has('search')) {
-            $siswa = Siswa::where('kelas_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        }else {
-            $siswa = Siswa::paginate(5);
-        }
+        // if($request->has('search')){
+        //     $siswa = Siswa::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $siswa = Siswa::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $siswa = Siswa::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $siswa = Siswa::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }elseif($request->has('search')) {
+        //     $siswa = Siswa::where('kelas_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
+        // }else {
+        // }
+
+        $siswa = Siswa::paginate(5);
         $kelas_id = Kelas::all();
         $mapel_id = Mapel::all();
         return view('component.siswa.index', compact('siswa', 'kelas_id', 'mapel_id'));
@@ -44,7 +46,7 @@ class SiswaController extends Controller
     {
         $kelas_id = Kelas::all();
         $mapel_id = Mapel::all();
-        return view('component.siswa.create', compact('kelas_id', 'mapel_id'));
+        return view('component.siswa.form', compact('kelas_id', 'mapel_id'));
     }
 
     /**
@@ -55,15 +57,31 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nama' => 'required|max:255',
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required',
             'alamat' => 'required',
-            'jenis_kelamin' => 'required'
+            'jenis_kelamin' => 'required',
+            'kelas_id' => 'required',
+            'mapel_id' => 'required'
         ]);
 
-        $siswa = Siswa::create($request->all());
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        }
 
-        return redirect('siswa');
+        $siswa = Siswa::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'kelas_id' => $request->kelas_id,
+            'mapel_id' => $request->mapel_id
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Disimpan',
+            'data' => $siswa
+        ]);
     }
 
     /**
@@ -72,9 +90,10 @@ class SiswaController extends Controller
      * @param  \App\Models\Siswa  $siswa
      * @return \Illuminate\Http\Response
      */
-    public function show(Siswa $siswa)
+    public function show($id)
     {
-        //
+        $siswa = Siswa::find($id);
+        return response()->json($siswa);
     }
 
     /**
@@ -85,10 +104,7 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
-        $siswa = Siswa::find($id);
-        $kelas = Kelas::all();
-        $mapel = Mapel::all();
-        return view('component.siswa.edit', compact('siswa', 'kelas', 'mapel'));
+        //
     }
 
     /**
@@ -98,23 +114,17 @@ class SiswaController extends Controller
      * @param  \App\Models\Siswa  $siswa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Siswa $siswa)
+    public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'nama' => 'required|max:255',
-            'alamat' => 'required',
-            'jenis_kelamin' => 'required'
-        ]);
+        $siswa = Siswa::find($id);
+        $siswa->nama = $request->nama;
+        $siswa->alamat = $request->alamat;
+        $siswa->jenis_kelamin = $request->jenis_kelamin;
+        $siswa->kelas_id = $request->kelas_id;
+        $siswa->mapel_id = $request->mapel_id;
+        $siswa->update();
 
-        $siswa->update([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'kelas_id' => $request->kelas_id,
-            'mapel_id' => $request->mapel_id
-        ]);
-
-        return redirect('siswa');
+        return response()->json('Data Berhasil Disimpan');
     }
 
     /**

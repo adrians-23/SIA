@@ -27,17 +27,12 @@
         <div class="card-header">
             <h3 class="card-title">Data Mapel</h3>
             <div class="card-tools">
-                <form action="/mapel" class="d-flex" role="search" method="GET">
-                    <input class="form-control" type="search" name="search" placeholder="Cari Mapel" aria-label="Search" style="width: 200px;">
-                    <button class="btn btn-outline-secondary mx-1" type="submit">Cari</button>
-                </form>
+                <button type="button" onclick="addForm('{{ route('mapel.store')}}')" class="btn btn-tool">
+                    <div class="btn btn-sm btn-primary">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </button>
             </div>
-            <br>
-            <button type="button" onclick="addForm('{{ route('mapel.store')}}')" class="btn btn-tool">
-                <div class="btn btn-sm btn-primary">
-                    <i class="fa fa-plus"></i>
-                </div>
-            </button>
         </div>
         <div class="card-body">
             {{-- Judul Data Mapel --}}
@@ -54,21 +49,16 @@
                 <tbody class="table-group-divide">
                     @foreach ($mapel as $key => $item)
                     <tr>
-                        <th scope="row">{{ $mapel -> firstItem() + $key }}</th>
+                        <th scope="row">{{ $key+1 }}</th>
                         <td>{{ $item->nama }}</td>
                         <td>
-                            <button onclick="editForm('')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            <button onclick="editData('{{ route('mapel.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                            <button onclick="deleteData('{{ route('mapel.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-
-            <div class="mt-3">
-                {{ $mapel->links() }}
-            </div>
-
         </div>
 
         {{-- <div class="card-footer">
@@ -79,20 +69,87 @@
 
 </section>
 
-@include('component.mapel.create')
+@include('component.mapel.form')
 
 @endsection
 
 @push('script')
     <script>
-        function addForm(){
+
+        // Data Tables
+        let table;
+
+        $(function() {
+            table = $('.table').DataTable({
+                processing: true,
+                autowidth: false,
+                ajax: {
+                    url: '{{ route('mapel.data') }}'
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'nama'}
+                ];
+            })
+        })
+
+        $('#modalForm').on('submit', function(e){
+            if(! e.preventDefault()){
+                $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
+                .done((response) => {
+                    $('#modalForm').modal('hide');
+                    table.ajax.reload();
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menyimpan Data');
+                    return;
+                })
+            }
+        })
+
+        function addForm(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Tambah Data Guru');
+            $('#modalForm .modal-title').text('Tambah Data Mapel');
+            $('#modalForm form')[0].reset();
+
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('post');
         }
 
-        function editData(){
+        function editData(url){
             $('#modalForm').modal('show');
-            $('#modalForm .modal-title').text('Edit Data Guru');
+            $('#modalForm .modal-title').text('Edit Data Mapel');
+
+            $('#modalForm form')[0].reset();
+            $('#modalForm form').attr('action', url);
+            $('#modalForm [name=_method]').val('put');
+
+            $.get (url)
+                .done((response) => {
+                    $('#modalForm [name=nama]').val(response.nama);
+                    // console.log(response.nama);
+                })
+                .fail((errors) => {
+                    alert('Tidak Dapat Menampilkan Data');
+                    return;
+                })
+        }
+
+        function deleteData(url){
+            if(confirm('Yakin Ingin Menghapus Data?')){
+                $.post(url, {
+                    '_token' : $('[name=csrf-token]').attr('content'),
+                    '_method' : 'delete'
+                })
+                .done((response) => {
+                    alert('Data Berhasil Dihapus');
+                    return;
+                })
+                .fail((errors) => {
+                    alert('Data Gagal Dihapus!');
+                    return;
+                })
+            }
         }
     </script>
 @endpush
