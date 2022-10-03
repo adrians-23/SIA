@@ -16,7 +16,10 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $kelas = Kelas::all();
-        return view('component.kelas.index', compact('kelas'));
+
+        $title = "Kelas";
+
+        return view('component.kelas.index', compact('kelas', 'title'));
     }
 
     public function data()

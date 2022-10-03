@@ -7,14 +7,15 @@
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row callout callout-info">
             <div class="col-sm-6">
-                <h1>Data Mapel</h1>
+                <h1>Data {{ $title }}</h1>
+                <p style="opacity: 75%;">Data mapel yang tersedia.</p>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Blank Page</li>
+                    <li class="breadcrumb-item active">{{ $title }}</li>
                 </ol>
             </div>
         </div>
@@ -25,18 +26,18 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Data Mapel</h3>
-            <div class="card-tools">
+            {{-- <h3 class="card-title">Data Mapel</h3> --}}
+            <div class="my-3">
                 <button type="button" onclick="addForm('{{ route('mapel.store')}}')" class="btn btn-tool">
-                    <div class="btn btn-sm btn-primary">
-                        <i class="fa fa-plus"></i>
+                    <div class="btn btn-sm btn-primary shadow-sm rounded-pill" style="width: 95px;">
+                        <i class="fa fa-plus"></i> Tambah
                     </div>
                 </button>
             </div>
         </div>
         <div class="card-body">
             {{-- Judul Data Mapel --}}
-            <table class="table table-hover text-nowrap">
+            <table class="table table-hover text-nowrap" style="width: 100%;">
                 <thead>
                     <tr>
                         <th scope="col" width="50px">ID</th>

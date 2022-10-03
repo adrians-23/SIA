@@ -18,7 +18,10 @@ class GuruController extends Controller
     {
         $guru = Guru::all();
         $mapel_id = Mapel::all();
-        return view('component.guru.index', compact('guru', 'mapel_id'));
+
+        $title = "Guru";
+
+        return view('component.guru.index', compact('guru', 'mapel_id', 'title'));
     }
 
     public function data()

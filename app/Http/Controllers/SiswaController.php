@@ -20,7 +20,10 @@ class SiswaController extends Controller
         $siswa = Siswa::paginate(5);
         $kelas_id = Kelas::all();
         $mapel_id = Mapel::all();
-        return view('component.siswa.index', compact('siswa', 'kelas_id', 'mapel_id'));
+
+        $title = "Guru";
+
+        return view('component.siswa.index', compact('siswa', 'kelas_id', 'mapel_id', 'title'));
     }
 
     public function data()

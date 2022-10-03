@@ -16,7 +16,10 @@ class MapelController extends Controller
     public function index(Request $request)
     {
         $mapel = Mapel::all();
-        return view('component.mapel.index', compact('mapel'));
+
+        $title = "Mapel";
+        
+        return view('component.mapel.index', compact('mapel', 'title'));
     }
 
     public function data()
