@@ -30,6 +30,12 @@ class SiswaController extends Controller
         return datatables()
             ->of($siswa)
             ->addIndexColumn()
+            ->addColumn('mapel_id', function($guru){
+                return $guru->mapel->nama;
+            })
+            ->addColumn('kelas_id', function($guru){
+                return $guru->kelas->nama;
+            })
             ->addColumn('action', function($siswa){
                 return '
 
@@ -40,7 +46,7 @@ class SiswaController extends Controller
 
                 ';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'mapel_id', 'kelas_id'])
             ->make(true);
     }
 

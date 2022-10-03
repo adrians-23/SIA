@@ -28,6 +28,9 @@ class GuruController extends Controller
         return datatables()
             ->of($guru)
             ->addIndexColumn()
+            ->addColumn('mapel_id', function($guru){
+                return $guru->mapel->nama;
+            })
             ->addColumn('action', function($guru){
                 return '
 
@@ -38,7 +41,7 @@ class GuruController extends Controller
 
                 ';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'mapel_id'])
             ->make(true);
     }
 
