@@ -16,21 +16,30 @@ class GuruController extends Controller
      */
     public function index(Request $request)
     {
-        // search functionality
-        // if($request->has('search')){
-        //     $guru = Guru::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $guru = Guru::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $guru = Guru::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $guru = Guru::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }else {
-        // }
-
         $guru = Guru::all();
         $mapel_id = Mapel::all();
         return view('component.guru.index', compact('guru', 'mapel_id'));
+    }
+
+    public function data()
+    {
+        $guru = guru::orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($guru)
+            ->addIndexColumn()
+            ->addColumn('action', function($guru){
+                return '
+
+                <div class="btn-group">
+                    <button onclick="editData(`' .route('guru.update', $guru->id). '`)" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteData(`' .route('guru.destroy', $guru->id). '`)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                </div>
+
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**

@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+    {{-- Izitoast --}}
+    <link rel="stylesheet" href="{{ asset('/izitoast/iziToast.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
 
@@ -53,6 +55,12 @@
     <script src="{{ asset('template/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('template/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('template/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+
+    {{-- Izitoast --}}
+    <script src="{{ asset('/izitoast/iziToast.min.js') }}"></script>
+
+    {{-- SweetAlert --}}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     @stack('script')
 

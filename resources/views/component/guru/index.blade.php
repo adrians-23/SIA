@@ -49,7 +49,7 @@
                 </thead>
         
         {{-- Data Guru --}}
-                <tbody class="table-group-divide">
+         
                     @foreach ($guru as $key => $item)
                     <tr>
                         <th scope="row">{{ $key+1 }}</th>
@@ -58,12 +58,12 @@
                         <td>{{ $item->jenis_kelamin }}</td>
                         <td>{{ ! empty($item->mapel->nama) ?  $item->mapel->nama : '' }}</td>
                         <td>
-                            <button onclick="editData('{{ route('guru.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="deleteData('{{ route('guru.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            {{-- <button onclick="editData('{{ route('guru.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                            <button onclick="deleteData('{{ route('guru.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> --}}
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
+                
             </table>
         </div>
 
@@ -86,7 +86,21 @@
         let table;
 
         $(function() {
-            table = $('.table').DataTable()
+            table = $('.table').DataTable({
+                proccesing: true,
+                autowidth: false,
+                ajax: {
+                    url: '{{ route('guru.data') }}'
+                },
+                columns: [
+                    {data: 'DT_RowIndex'},
+                    {data: 'nama'},
+                    {data: 'alamat'},
+                    {data: 'jenis_kelamin'},
+                    {data: 'mapel_id'},
+                    {data: 'action'}
+                ]
+            });
         })
 
         $('#modalForm').on('submit', function(e){
@@ -94,9 +108,19 @@
                 $.post($('#modalForm form').attr('action'), $('#modalForm form').serialize())
                 .done((response) => {
                     $('#modalForm').modal('hide');
+                    table.ajax.reload();
+                    iziToast.success({
+                        title: 'Sukses',
+                        message: 'Data berhasil disimpan',
+                        position: 'topRight'
+                    })
                 })
                 .fail((errors) => {
-                    alert('Tidak Dapat Menyimpan Data');
+                    iziToast.error({
+                        title: 'Gagal',
+                        message: 'Data gagal disimpan',
+                        position: 'topRight'
+                    })
                     return;
                 })
             }
@@ -134,20 +158,37 @@
         }
 
         function deleteData(url){
-            if(confirm('Yakin Ingin Menghapus Data?')){
-                $.post(url, {
+            swal({
+                title: "Apa anda yakin menghapus data ini?",
+                text: "Jika anda klik OK, maka data akan terhapus",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    $.post(url, {
                     '_token' : $('[name=csrf-token]').attr('content'),
                     '_method' : 'delete'
                 })
                 .done((response) => {
-                    alert('Data Berhasil Dihapus');
-                    return;
+                    swal({
+                    title: "Sukses",
+                    text: "Data berhasil dihapus!",
+                    icon: "success",
+                    });
                 })
                 .fail((errors) => {
-                    alert('Data Gagal Dihapus!');
-                    return;
+                    swal({
+                    title: "Gagal",
+                    text: "Data gagal dihapus!",
+                    icon: "error",
+                    });
                 })
-            }
+                table.ajax.reload();
+                }
+            });
+
         }
     </script>
 @endpush

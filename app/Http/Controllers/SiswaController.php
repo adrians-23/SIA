@@ -17,24 +17,31 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
     {
-        // search functionality
-        // if($request->has('search')){
-        //     $siswa = Siswa::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $siswa = Siswa::where('alamat', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $siswa = Siswa::where('mapel_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $siswa = Siswa::where('jenis_kelamin', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }elseif($request->has('search')) {
-        //     $siswa = Siswa::where('kelas_id', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }else {
-        // }
-
         $siswa = Siswa::paginate(5);
         $kelas_id = Kelas::all();
         $mapel_id = Mapel::all();
         return view('component.siswa.index', compact('siswa', 'kelas_id', 'mapel_id'));
+    }
+
+    public function data()
+    {
+        $siswa = siswa::orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($siswa)
+            ->addIndexColumn()
+            ->addColumn('action', function($siswa){
+                return '
+
+                <div class="btn-group">
+                    <button onclick="editData(`' .route('siswa.update', $siswa->id). '`)" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteData(`' .route('siswa.destroy', $siswa->id). '`)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                </div>
+
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**

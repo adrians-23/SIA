@@ -21,11 +21,13 @@ Route::get('/guru', function () {
 //  Route::resource('/', HomeController::class);
 
  //route kelas
+ Route::get('/kelas/data', [KelasController::class, 'data'])->name('kelas.data');
  Route::resource('/kelas', KelasController::class);
  Route::get('/kelas/edit/{id}', [KelasController::class, 'edit']);
  Route::get('/kelas/hapus/{id}', [KelasController::class, 'destroy']);
 
  //route siswa
+ Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
  Route::resource('/siswa', SiswaController::class);
  Route::get('/siswa/edit/{id}', [SiswaController::class, 'edit']);
  Route::get('/siswa/hapus/{id}', [SiswaController::class, 'destroy']);
@@ -37,6 +39,7 @@ Route::get('/guru', function () {
  Route::get('/mapel/hapus/{id}', [MapelController::class, 'destroy']);
 
  //route guru
+ Route::get('/guru/data', [GuruController::class, 'data'])->name('guru.data');
  Route::resource('/guru', GuruController::class);
  Route::get('/guru/edit/{id}', [GuruController::class, 'edit']);
  Route::get('/guru/hapus/{id}', [GuruController::class, 'destroy']);

@@ -15,14 +15,29 @@ class KelasController extends Controller
      */
     public function index(Request $request)
     {
-        // search functionality
-        // if($request->has('search')) {
-        //     $kelas = Kelas::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }else {
-        // }
-        
         $kelas = Kelas::all();
         return view('component.kelas.index', compact('kelas'));
+    }
+
+    public function data()
+    {
+        $kelas = kelas::orderBy('id', 'desc')->get();
+
+        return datatables()
+            ->of($kelas)
+            ->addIndexColumn()
+            ->addColumn('action', function($kelas){
+                return '
+
+                <div class="btn-group">
+                    <button onclick="editData(`' .route('kelas.update', $kelas->id). '`)" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteData(`' .route('kelas.destroy', $kelas->id). '`)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                </div>
+
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     /**

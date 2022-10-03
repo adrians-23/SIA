@@ -15,12 +15,6 @@ class MapelController extends Controller
      */
     public function index(Request $request)
     {
-        // search functionality
-        // if($request->has('search')) {
-        //     $mapel = Mapel::where('nama', 'LIKE', '%' .$request->search.'%')->paginate(5);
-        // }else {
-        // }
-
         $mapel = Mapel::all();
         return view('component.mapel.index', compact('mapel'));
     }
@@ -32,6 +26,17 @@ class MapelController extends Controller
         return datatables()
             ->of($mapel)
             ->addIndexColumn()
+            ->addColumn('action', function($mapel){
+                return '
+
+                <div class="btn-group">
+                    <button onclick="editData(`' .route('mapel.update', $mapel->id). '`)" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                    <button onclick="deleteData(`' .route('mapel.destroy', $mapel->id). '`)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                </div>
+
+                ';
+            })
+            ->rawColumns(['action'])
             ->make(true);
     }
 

@@ -39,14 +39,23 @@
                         <div class="my-1">
                             <label class="mb-2" for="nama">Jenis Kelamin</label>
                             <br>
-                            <div class="form-check form-check-inline">
+                            <select name="jenis_kelamin" id="jenis_kelamin" value="{{ old('jenis_kelamin')}}" class="form-control @error('jenis_kelamin') is-invalid @enderror">
+                                <option selected>Pilih...</option>
+                                <option value="Laki-laki"> Laki-Laki</option>
+                                <option value="Perempuan"> Perempuan</option>
+                            </select>
+
+                            {{-- Jika menggunakan radio button --}}
+
+                            {{-- <div class="form-check form-check-inline">
                                 <label for="jenis_kelamin">
-                                    {{-- {{$siswa->jenis_kelamin == 'L'? 'checked' : ''}} --}}
-                                    {{-- {{$siswa->jenis_kelamin == 'P'? 'checked' : ''}} --}}
+                                    {{$siswa->jenis_kelamin == 'L'? 'checked' : ''}}
+                                    {{$siswa->jenis_kelamin == 'P'? 'checked' : ''}}
                                     <input type="radio" name="jenis_kelamin" value="Laki-laki" id="jenis_kelamin"  > Laki-Laki
                                     <input type="radio" name="jenis_kelamin" value="Perempuan" id="jenis_kelamin"  > Perempuan
                                 </label>
-                            </div>
+                            </div> --}}
+                            
                             @error('jenis_kelamin')
                                 <div class="text-danger">
                                     {{ $message }}

@@ -46,18 +46,18 @@
                 </thead>
         
         {{-- Data Mapel --}}
-                <tbody class="table-group-divide">
+                
                     @foreach ($mapel as $key => $item)
                     <tr>
                         <th scope="row">{{ $key+1 }}</th>
                         <td>{{ $item->nama }}</td>
                         <td>
-                            <button onclick="editData('{{ route('mapel.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="deleteData('{{ route('mapel.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            {{-- <button onclick="editData('{{ route('mapel.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+                            <button onclick="deleteData('{{ route('mapel.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> --}}
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
+              
             </table>
         </div>
 
@@ -81,16 +81,17 @@
 
         $(function() {
             table = $('.table').DataTable({
-                processing: true,
+                proccesing: true,
                 autowidth: false,
                 ajax: {
                     url: '{{ route('mapel.data') }}'
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
-                    {data: 'nama'}
-                ];
-            })
+                    {data: 'nama'},
+                    {data: 'action'}
+                ]
+            });
         })
 
         $('#modalForm').on('submit', function(e){
@@ -99,9 +100,18 @@
                 .done((response) => {
                     $('#modalForm').modal('hide');
                     table.ajax.reload();
+                    iziToast.success({
+                        title: 'Sukses',
+                        message: 'Data berhasil disimpan',
+                        position: 'topRight'
+                    })
                 })
                 .fail((errors) => {
-                    alert('Tidak Dapat Menyimpan Data');
+                    iziToast.error({
+                        title: 'Gagal',
+                        message: 'Data gagal disimpan',
+                        position: 'topRight'
+                    })
                     return;
                 })
             }
@@ -136,20 +146,37 @@
         }
 
         function deleteData(url){
-            if(confirm('Yakin Ingin Menghapus Data?')){
-                $.post(url, {
+            swal({
+                title: "Apa anda yakin menghapus data ini?",
+                text: "Jika anda klik OK, maka data akan terhapus",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    $.post(url, {
                     '_token' : $('[name=csrf-token]').attr('content'),
                     '_method' : 'delete'
                 })
                 .done((response) => {
-                    alert('Data Berhasil Dihapus');
-                    return;
+                    swal({
+                    title: "Sukses",
+                    text: "Data berhasil dihapus!",
+                    icon: "success",
+                    });
                 })
                 .fail((errors) => {
-                    alert('Data Gagal Dihapus!');
-                    return;
+                    swal({
+                    title: "Gagal",
+                    text: "Data gagal dihapus!",
+                    icon: "error",
+                    });
                 })
-            }
+                table.ajax.reload();
+                }
+            });
+
         }
     </script>
 @endpush
