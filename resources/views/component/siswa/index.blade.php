@@ -38,6 +38,7 @@
         <div class="card-body">
             {{-- Judul Data Siswa --}}
             <table class="table table-hover text-nowrap" style="width: 100%;">
+                
                 <thead>
                     <tr>
                         <th scope="col" width="50px">ID</th>
@@ -49,24 +50,7 @@
                         <th scope="col" width="84px">Action</th>
                     </tr>
                 </thead>
-        
-        {{-- Data Siswa --}}
-                <tbody class="table-group-divide">
-                    @foreach ($siswa as $key => $item)
-                    <tr>
-                        <th scope="row">{{ $key+1 }}</th>
-                        <td>{{ $item->nama }}</td>
-                        <td>{{ $item->alamat }}</td>
-                        <td>{{ $item->jenis_kelamin }}</td>
-                        <td>{{ ! empty($item->kelas->nama) ?  $item->kelas->nama : '' }}</td>
-                        <td>{{ ! empty($item->mapel->nama) ?  $item->mapel->nama : '' }}</td>
-                        <td>
-                            {{-- <button onclick="editData('{{ route('siswa.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="deleteData('{{ route('siswa.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> --}}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+
             </table>
         </div>
 

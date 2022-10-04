@@ -38,6 +38,7 @@
         <div class="card-body">
             {{-- Judul Data Mapel --}}
             <table class="table table-hover text-nowrap" style="width: 100%;">
+                
                 <thead>
                     <tr>
                         <th scope="col" width="50px">ID</th>
@@ -45,19 +46,6 @@
                         <th scope="col" width="84px">Action</th>
                     </tr>
                 </thead>
-        
-        {{-- Data Mapel --}}
-                
-                    @foreach ($mapel as $key => $item)
-                    <tr>
-                        <th scope="row">{{ $key+1 }}</th>
-                        <td>{{ $item->nama }}</td>
-                        <td>
-                            {{-- <button onclick="editData('{{ route('mapel.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="deleteData('{{ route('mapel.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> --}}
-                        </td>
-                    </tr>
-                    @endforeach
               
             </table>
         </div>

@@ -18,8 +18,10 @@
     {{-- Izitoast --}}
     <link rel="stylesheet" href="{{ asset('/izitoast/iziToast.min.css') }}">
 
+    {{-- FontAwesome --}}
     <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
 
+    {{-- AdminLTE --}}
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css?v=3.2.0') }}">
 </head>
 

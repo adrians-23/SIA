@@ -14,7 +14,7 @@
                 <img src="https://github.com/adrians-23.png" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Adrian</a>
+                <a href="#" class="d-block">{{ Auth()->user()->name }}</a>
             </div>
         </div>
 

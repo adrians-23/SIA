@@ -23,13 +23,13 @@
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                Data Guru</a>
+                                Data Guru
                             </span>
                             <span class="info-box-number">
                                 {{ $guru }}
                             </span>
                         </div>
-                        <a href="#" class="small-box-footer nav-link">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('guru.index') }}" class="small-box-footer nav-item">Lihat data <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
     
                 </div>
@@ -41,7 +41,7 @@
                             <span class="info-box-text">Data Siswa</span>
                             <span class="info-box-number">{{ $siswa }}</span>
                         </div>
-    
+                        <a href="{{ route('siswa.index') }}" class="small-box-footer nav-item">Lihat data <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
     
                 </div>
@@ -55,7 +55,7 @@
                             <span class="info-box-text">Data Kelas</span>
                             <span class="info-box-number">{{ $kelas }}</span>
                         </div>
-    
+                        <a href="{{ route('kelas.index') }}" class="small-box-footer nav-item">Lihat data <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
     
                 </div>
@@ -67,7 +67,7 @@
                             <span class="info-box-text">Data Mapel</span>
                             <span class="info-box-number">{{ $mapel }}</span>
                         </div>
-    
+                        <a href="{{ route('mapel.index') }}" class="small-box-footer nav-item">Lihat data <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
     
                 </div>

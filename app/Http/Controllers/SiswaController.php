@@ -33,11 +33,11 @@ class SiswaController extends Controller
         return datatables()
             ->of($siswa)
             ->addIndexColumn()
-            ->addColumn('mapel_id', function($guru){
-                return $guru->mapel->nama;
+            ->addColumn('kelas_id', function($siswa){
+                return !empty($siswa->kelas->nama) ? $siswa->kelas->nama : '-';
             })
-            ->addColumn('kelas_id', function($guru){
-                return $guru->kelas->nama;
+            ->addColumn('mapel_id', function($siswa){
+                return !empty($siswa->mapel->nama) ? $siswa->mapel->nama : '-';
             })
             ->addColumn('action', function($siswa){
                 return '

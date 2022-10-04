@@ -42,6 +42,7 @@
         <div class="card-body">
             {{-- Judul Data Kelas --}}
             <table class="table table-hover text-nowrap" style="width: 100%;">
+                
                 <thead>
                     <tr>
                         <th scope="col" width="50px">ID</th>
@@ -49,19 +50,6 @@
                         <th scope="col" width="84px">Action</th>
                     </tr>
                 </thead>
-        
-        {{-- Data Kelas --}}
-          
-                    @foreach ($kelas as $key => $item)
-                    <tr>
-                        <th scope="row">{{  $key+1  }}</th>
-                        <td>{{ $item->nama }}</td>
-                        <td>
-                            {{-- <button onclick="editData('{{ route('kelas.update', $item->id) }}')" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-                            <button onclick="deleteData('{{ route('kelas.destroy', $item->id) }}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> --}}
-                        </td>
-                    </tr>
-                    @endforeach
            
             </table>
         </div>
