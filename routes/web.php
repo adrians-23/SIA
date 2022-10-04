@@ -6,16 +6,14 @@ use App\Http\Controllers\{
     KelasController,
     SiswaController,
     MapelController,
-    GuruController
+    GuruController,
+    DashboardController
 };
 
 Route::get('/', function () {
     return view('home');
 });
-
-Route::get('/guru', function () {
-    return view('component.guru.index');
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
  // route halaman utama
 //  Route::resource('/', HomeController::class);

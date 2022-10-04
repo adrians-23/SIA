@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Home
+    Dashboard
 @endsection
 
 @section('content')
@@ -22,12 +22,14 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Data Guru</span>
+                            <span class="info-box-text">
+                                Data Guru</a>
+                            </span>
                             <span class="info-box-number">
-                         
+                                {{ $guru }}
                             </span>
                         </div>
-    
+                        <a href="#" class="small-box-footer nav-link">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
     
                 </div>
@@ -37,7 +39,7 @@
                         <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Data Siswa</span>
-                            <span class="info-box-number"></span>
+                            <span class="info-box-number">{{ $siswa }}</span>
                         </div>
     
                     </div>
@@ -51,7 +53,7 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-chalkboard"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Data Kelas</span>
-                            <span class="info-box-number"></span>
+                            <span class="info-box-number">{{ $kelas }}</span>
                         </div>
     
                     </div>
@@ -63,7 +65,7 @@
                         <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Data Mapel</span>
-                            <span class="info-box-number"></span>
+                            <span class="info-box-number">{{ $mapel }}</span>
                         </div>
     
                     </div>
