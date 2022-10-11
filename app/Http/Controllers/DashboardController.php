@@ -12,10 +12,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $guru = Guru::count();
-        $siswa = Siswa::count();
-        $kelas = Kelas::count();
-        $mapel = mapel::count();
+        $guru = Guru::all();
+        $siswa = Siswa::all();
+        $kelas = Kelas::all();
+        $mapel = mapel::all();
         return view('component.dashboard.index', compact('guru', 'siswa', 'kelas', 'mapel'));
     }
 }

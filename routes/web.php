@@ -22,7 +22,7 @@ Route::post('/postlogin', [AuthController::class, 'postlogin'])->name('login.pos
 //route logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'checkrole:admin']], function(){
     // route dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -33,7 +33,8 @@ Route::group(['middleware' => 'auth'], function(){
     //route siswa
     Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
     Route::resource('/siswa', SiswaController::class);
-
+    Route::get('/siswa/profile/{id}', [SiswaController::class, 'profile'])->name('component.siswa.profile');
+    
     //route mapel
     Route::get('/mapel/data', [MapelController::class, 'data'])->name('mapel.data');
     Route::resource('/mapel', MapelController::class);
@@ -41,4 +42,9 @@ Route::group(['middleware' => 'auth'], function(){
     //route guru
     Route::get('/guru/data', [GuruController::class, 'data'])->name('guru.data');
     Route::resource('/guru', GuruController::class);
+});
+
+Route::group(['middleware' => ['auth', 'checkrole:admin,siswa']], function(){
+    // route dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });

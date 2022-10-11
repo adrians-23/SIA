@@ -14,7 +14,7 @@
                 <img src="https://github.com/adrians-23.png" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth()->user()->name }}</a>
+                <a href="#" class="d-block">{{ !empty(Auth()->user()->name) ? Auth()->user()->name : '-' }}</a>
             </div>
         </div>
 
@@ -34,6 +34,7 @@
                     </li>
                 </li>
 
+                @if(auth()->user()->role == 'admin')
                 <li class="nav-header">
                     MASTER
                     <li class="nav-item">
@@ -72,6 +73,7 @@
                         </a>
                     </li>
                 </li>
+                @endif
             </ul>
         </nav>
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use App\Models\Mapel;
 use App\Models\Kelas;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
+use Str;
 
 class SiswaController extends Controller
 {
@@ -33,6 +35,11 @@ class SiswaController extends Controller
         return datatables()
             ->of($siswa)
             ->addIndexColumn()
+            ->editColumn('nama', function($siswa){
+                return '
+                    <a href="/siswa/profile/'.$siswa->id.'">'.$siswa->nama.'</a>
+                ';
+            })
             ->addColumn('kelas_id', function($siswa){
                 return !empty($siswa->kelas->nama) ? $siswa->kelas->nama : '-';
             })
@@ -49,7 +56,7 @@ class SiswaController extends Controller
 
                 ';
             })
-            ->rawColumns(['action', 'mapel_id', 'kelas_id'])
+            ->rawColumns(['action','nama', 'mapel_id', 'kelas_id'])
             ->make(true);
     }
 
@@ -84,14 +91,18 @@ class SiswaController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors(), 422);
         }
+        $user = User::all();
+        $user = new User;
+        $user->role = 'siswa';
+        $user->name = $request->nama;
+        $user->email = $request->email;
+        $user->password = bcrypt('rahasia');
+        $user->remember_token = Str::random(20);
+        $user->save();
 
-        $siswa = Siswa::create([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'kelas_id' => $request->kelas_id,
-            'mapel_id' => $request->mapel_id
-        ]);
+        $request->request->add(['user_id' => $user->id]);
+        
+        $siswa = Siswa::create($request->all());
 
         return response()->json([
             'success' => true,
@@ -155,5 +166,12 @@ class SiswaController extends Controller
         $siswa->delete();
 
         return redirect('siswa');
+    }
+
+    public function profile($id)
+    {
+        $siswa = Siswa::find($id);
+        // $siswa = Siswa::all();
+        return view('component.siswa.profile',  compact('siswa'));
     }
 }

@@ -24,6 +24,17 @@
                             @enderror
                         </div>
 
+                        {{-- Add Email --}}
+                        <div class="my-1">
+                            <label class="mb-2" for="nama">Email</label>
+                            <input type="email" name="email" id="email" value="{{ old('email')}}" class="form-control @error('email') is-invalid @enderror">
+                            @error('email')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
                         {{-- Add Alamat --}}
                         <div class="my-1">
                             <label class="mb-2" for="floatingTextarea">Alamat</label>
