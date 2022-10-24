@@ -34,7 +34,7 @@
                     </li>
                 </li>
 
-                @if(auth()->user()->role == 'admin')
+                @if( !empty(Auth()->user()->role) ? Auth()->user()->role : '-' )
                 <li class="nav-header">
                     MASTER
                     <li class="nav-item">

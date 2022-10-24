@@ -15,7 +15,12 @@ class DashboardController extends Controller
         $guru = Guru::all();
         $siswa = Siswa::all();
         $kelas = Kelas::all();
-        $mapel = mapel::all();
+        $mapel = Mapel::all();
         return view('component.dashboard.index', compact('guru', 'siswa', 'kelas', 'mapel'));
+
+        $id_siswa = auth()->user()->id;
+
+        $find_siswa = Siswa::where('user_id', $id_siswa)->get();
+        return view('component.dashboard.index', compact('guru', 'siswa', 'kelas', 'mapel', 'find_siswa'));
     }
 }

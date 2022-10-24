@@ -87,6 +87,15 @@
                                 <th scope="col">Kelas</th>
                             </tr>
                         </thead>
+
+                        <tbody>
+                            @foreach ($mapel as $item)
+                                <tr>
+                                    <th>{{ $item->nama }}</th>
+                                    <th>{{ $item->nama }}</th>
+                                </tr>      
+                            @endforeach
+                        </tbody>
                         
                     </table>
                 </div>
